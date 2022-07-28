@@ -13,6 +13,12 @@ func Assert(t *testing.T, expected uint64, actual uint64) {
 	}
 }
 
+func AssertBool(t *testing.T, expected bool, actual bool) {
+	if expected != actual {
+		t.Error(fmt.Sprintf("Expected %v Actual %v", expected, actual))
+	}
+}
+
 func Test_Process_One_by_One_Block(t *testing.T) {
 	blockProcessor := BlockProcessor{
 		rwLock:                 &sync.RWMutex{},
@@ -73,7 +79,7 @@ func Test_Process_Skip_Duplicate_Blocks(t *testing.T) {
 }
 
 /*
-If race condition will throw error "fatal error: concurrent map writes"
+If race condition it will throw error "fatal error: concurrent map writes", (in case you remove the locks)
 20M requests can finish in 4.26 seconds in my machine, which makes it 4.6 millions per second !!!
 I didnt see a point in optimizing further
 */
@@ -100,4 +106,39 @@ func Test_Concurrency_and_load_testing(t *testing.T) {
 	}
 	wg.Wait()
 	blockProcessor.print()
+}
+
+func Test_isValid(t *testing.T) {
+	blockProcessor := BlockProcessor{
+		rwLock: &sync.RWMutex{},
+		finalBlockToHeight: map[string]uint64{"Genesis Block": uint64(0),
+			"blockid-1": uint64(1),
+			"blockid-2": uint64(2),
+		},
+		processingBlockIdCount: make(map[string]int64),
+	}
+	{
+		isValid, _ := blockProcessor.checkIfValid(0, []string{"block-1"})
+		AssertBool(t, false, isValid)
+	}
+
+	{
+		isValid, _ := blockProcessor.checkIfValid(1, []string{"block-1"})
+		AssertBool(t, false, isValid)
+	}
+
+	{
+		isValid, _ := blockProcessor.checkIfValid(1, []string{"block-1", "block-2"})
+		AssertBool(t, false, isValid)
+	}
+
+	{
+		isValid, _ := blockProcessor.checkIfValid(1, []string{"block-1", "block-2", "block-3"})
+		AssertBool(t, true, isValid)
+	}
+
+	{
+		isValid, _ := blockProcessor.checkIfValid(3, []string{"block-1"})
+		AssertBool(t, true, isValid)
+	}
 }
