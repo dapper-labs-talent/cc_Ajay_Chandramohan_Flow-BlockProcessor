@@ -49,4 +49,5 @@ In this solution,
 3. When multiple threads try to update the block at that height, we use a  Write lock to make sure both readers and writers cannot access critical section. Even with not using ReadLock for readers, its almost 4.5M per second, so I didnt see a reason to optimize further.
 
 ### How to run
-"go test" should run all the test cases
+"go test" should run all the test cases,
+please note that one test case `Test_Concurrency_and_load_testing` takes almost 5 seconds to run as its load/concurrency testing using 20M go routines
