@@ -47,3 +47,6 @@ In this solution,
 1. We only choose the block which is present at height + 1, in the block list, rest all of the blocks are ignored, even thought its useful for later heights. For eg: if blockId:"1millionth" is called at height 1 million for 3 times, when the block height reaches 999,999 this block is *NOT* automatically accepted. 
 2. We keep a counter of blockIds, for the blockId whose counter became 3, we accept that block. Rest of the blocks at that height are ignore like step 1.
 3. When multiple threads try to update the block at that height, we use a  Write lock to make sure both readers and writers cannot access critical section. Even with not using ReadLock for readers, its almost 4.5M per second, so I didnt see a reason to optimize further.
+
+### How to run
+"go test" should run all the test cases
