@@ -40,3 +40,10 @@ blocks. Note, you don’t need to implement this external component.
 * Please approach this as you would a real-world problem. We are not only assessing your ability to solve the problem but also trade-offs/edge cases considered and your holistic approach to quality.
 * If anything remains unclear about this problem don’t hesitate to ask your Talent team associate who can get follow-ups from engineering. We will always respond to questions over email. However, we do not meet candidates to discuss questions over a call to ensure candidates are not given an unfair advantage.
 * When submitting, please include a section in your response, or within your code, to summarize any assumptions, or other matters to share to us in considering your submission.
+
+
+## Solution
+In this solution, 
+1. We only choose the block which is present at height + 1, in the block list, rest all of the blocks are ignored, even thought its useful for later heights.
+2. We keep a counter of blockIds, for the blockId whose counter became 3, we accept that block. Rest of the blocks at that height are ignore like step 1.
+3. When multiple threads try to update the block at that height, we use a Write lock to make sure both readers and writers cannot access critical section. Even with not using ReadLock for readers, its almost 4.5M per second, so I didnt see a reason to optimize further.
