@@ -49,13 +49,14 @@ In this solution,
 3. When multiple threads try to update the block at that height, we use a  Write lock to make sure both readers and writers cannot access critical section. Even with not using ReadLock for readers, the throughput is 4.5M per second in my laptop, so I didnt see a reason to optimize further.
 
 ### Time and Space complexity
-Time complexity : O(1) for API call, as we only care about the previously accepted block
-Space complexity: O(N) + O(C), where N is length of the blockchain, C is number of clients attemping to accept blockchain the currentHeight + 1
+**Time complexity** : O(1) for API call, as we only care about the previously accepted block
+
+**Space complexity**: O(N) + O(C), where N is length of the blockchain, C is number of clients attemping to accept blockchain the currentHeight + 1
 
 ### Improvements
-Fairness: This model doesnt guarantee that the first client attempted to publish blockchainID third time gets their block accepted, as context switch can happen. To improve fairness we might need a queue based system.
+**Fairness:** This model doesnt guarantee that the first client attempted to publish blockchainID third time gets their block accepted, as context switch can happen. To improve fairness we might need a queue based system.
 
-Scaling to multiple nodes: Synchronization using threads cannot be scaled as distributed system. One solution I see is to 
+**Scaling to multiple nodes:** Synchronization using threads cannot be scaled as distributed system. One solution I see is to 
 1. use Kafka like queue topic, where multiple nodes can subscribe to the API data, where queues are partitioned by blockchain-id
 2. if any node finds that a certain blockchain-id for relevant height is published 3 times, it makes request to add to the blockchain.
 3. If multiple nodes makes requests at the same time to publish the block ,a consensus algoerithm like Raft is used to decide on which block will be accepted.
