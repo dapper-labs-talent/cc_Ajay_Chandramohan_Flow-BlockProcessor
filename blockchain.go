@@ -27,15 +27,15 @@ func (p *BlockProcessor) ProcessBlocks(startHeight uint64, blocks []string) uint
 		return currentHeight
 	}
 	processingHeight := uint64(len(p.finalBlockToHeight))
-	relvantBlockId := blocks[processingHeight-startHeight]
-	p.processingBlockIdCount[relvantBlockId]++
-	if p.processingBlockIdCount[relvantBlockId] == 3 {
-		_, ok := p.finalBlockToHeight[relvantBlockId]
+	relevantBlockId := blocks[processingHeight-startHeight]
+	p.processingBlockIdCount[relevantBlockId]++
+	if p.processingBlockIdCount[relevantBlockId] == 3 {
+		_, ok := p.finalBlockToHeight[relevantBlockId]
 		// check if the block has already been accepted at previous height
 		if ok {
 			return uint64(len(p.finalBlockToHeight)) - 1
 		}
-		p.finalBlockToHeight[relvantBlockId] = uint64(len(p.finalBlockToHeight))
+		p.finalBlockToHeight[relevantBlockId] = uint64(len(p.finalBlockToHeight))
 		p.processingBlockIdCount = make(map[string]int64)
 	}
 	return uint64(len(p.finalBlockToHeight)) - 1
