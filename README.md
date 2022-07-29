@@ -51,15 +51,16 @@ In this solution,
 ### Time and Space complexity
 **Time complexity** : O(1) for API call, as we only care about the previously accepted block
 
-**Space complexity**: O(N) + O(C), where N is length of the blockchain, C is number of clients attemping to accept blockchain the currentHeight + 1
+**Space complexity**: O(N) + O(ID), where N is length of the blockchain, ID is number of IDs attempted by clients to be accepted in the of height == currentHeight + 1
 
 ### Improvements
 **Fairness:** This model doesnt guarantee that the first client attempted to publish blockchainID third time gets their block accepted, as context switch can happen. To improve fairness we might need a queue based system.
 
 **Scaling to multiple nodes:** Synchronization using threads cannot be scaled as distributed system. One solution I see is to 
 1. use Kafka like queue topic, where multiple nodes can subscribe to the API data, where topics are partitioned by block-id
-2. if any node finds that a certain block-id for relevant height is published 3 times, it makes request to add to the main blockchain.
-3. If multiple nodes makes requests at the same time to publish the block ,a consensus algorithm like Raft is used to decide on which block will be accepted.
+2. The clients append their respective block-id for height to the above queue.
+3. if any node finds that a certain block-id for relevant height is published 3 times, it makes request to add to the main blockchain.
+4. If multiple nodes makes requests at the same time to publish the block ,a consensus algorithm like Raft is used to decide on which block will be accepted.
 
 ### How to run
 "go test" should run all the test cases,
