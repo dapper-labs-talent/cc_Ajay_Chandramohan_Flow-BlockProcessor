@@ -28,9 +28,9 @@ func Test_Process_One_by_One_Block(t *testing.T) {
 	for i := 0; i < 2; i++ {
 		Assert(t, 0, blockProcessor.ProcessBlocks(1, []string{"id-1"}))
 	}
-	blockProcessor.print()
+	//blockProcessor.print()
 	Assert(t, 1, blockProcessor.ProcessBlocks(1, []string{"id-1"}))
-	blockProcessor.print()
+	//blockProcessor.print()
 }
 
 func Test_Process_Multiple_BlockIds_Same_height(t *testing.T) {
@@ -43,7 +43,7 @@ func Test_Process_Multiple_BlockIds_Same_height(t *testing.T) {
 		Assert(t, 0, blockProcessor.ProcessBlocks(1, []string{"id-1"}))
 		Assert(t, 0, blockProcessor.ProcessBlocks(1, []string{"id-2"}))
 	}
-	blockProcessor.print()
+	//blockProcessor.print()
 	//id-1 wins as its first to reach 3 times
 	Assert(t, 1, blockProcessor.ProcessBlocks(1, []string{"id-1"}))
 	Assert(t, 1, blockProcessor.ProcessBlocks(1, []string{"id-2"}))
@@ -53,7 +53,7 @@ func Test_Process_Multiple_BlockIds_Same_height(t *testing.T) {
 		Assert(t, 1, blockProcessor.ProcessBlocks(2, []string{"id-2"}))
 	}
 	Assert(t, 2, blockProcessor.ProcessBlocks(2, []string{"id-2"}))
-	blockProcessor.print()
+	//blockProcessor.print()
 }
 
 func Test_Process_Skip_Duplicate_Blocks(t *testing.T) {
@@ -65,7 +65,7 @@ func Test_Process_Skip_Duplicate_Blocks(t *testing.T) {
 	for i := 0; i < 2; i++ {
 		Assert(t, 0, blockProcessor.ProcessBlocks(1, []string{"id-1"}))
 	}
-	blockProcessor.print()
+	//blockProcessor.print()
 	//id-1 is accepted as it reached 3 times
 	Assert(t, 1, blockProcessor.ProcessBlocks(1, []string{"id-1"}))
 
@@ -75,7 +75,7 @@ func Test_Process_Skip_Duplicate_Blocks(t *testing.T) {
 	}
 	//id-1 isnt accepted due to being duplicate
 	Assert(t, 1, blockProcessor.ProcessBlocks(2, []string{"id-1"}))
-	blockProcessor.print()
+	//blockProcessor.print()
 }
 
 /*
@@ -105,7 +105,7 @@ func Test_Concurrency_and_load_testing(t *testing.T) {
 		}
 	}
 	wg.Wait()
-	blockProcessor.print()
+	//blockProcessor.print()
 }
 
 func Test_isValid(t *testing.T) {
